@@ -1,5 +1,14 @@
 const app = require("./app");
-
-app.listen(3001, () => {
-  console.log("Server running. Use our API on port: 3001");
-});
+const mogoose = require("mongoose");
+const { DB_HOST, PORT } = process.env;
+mogoose
+  .connect(DB_HOST)
+  .then(() =>
+    app.listen(PORT, () => {
+      console.log("Database connection successful");
+    })
+  )
+  .catch((e) => {
+    console.log(e);
+    process.exit(1);
+  });
