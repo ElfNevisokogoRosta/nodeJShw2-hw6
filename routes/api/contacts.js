@@ -3,6 +3,7 @@ const validationMiddleware = require("../../midllewares/validation");
 const castError = require("../../midllewares/castError");
 const schema = require("../../schemas/joiContactSchema");
 const favoriteSchema = require("../../schemas/joiFavoriteSchema");
+const authorization = require("../../midllewares/authMidllewar");
 const router = express.Router();
 const {
   getAll,
@@ -25,6 +26,7 @@ router.put("/:contactId", castError, validationMiddleware(schema), update);
 
 router.patch(
   "/:contactId/favorite",
+  authorization,
   castError,
   validationMiddleware(favoriteSchema),
   toFavorite
