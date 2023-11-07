@@ -5,6 +5,7 @@ const userSchema = Joi.object({
   password: Joi.string().min(7).required(),
   subscription: Joi.valid(...subscriptionValues),
   token: Joi.string(),
+  avatarURL: Joi.string(),
 });
 
 module.exports = userSchema;
