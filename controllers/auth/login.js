@@ -6,14 +6,17 @@ const { JWT_SECRET } = process.env;
 const login = async (req, res, next) => {
   try {
     const user = req.user;
-    const { id, email, subscription } = user;
+    const { id, email, subscription, verify } = user;
+    console.log(user);
     const createdToken = jwt.sign({ id }, JWT_SECRET, { expiresIn: "23h" });
     const loginedUser = await User.findByIdAndUpdate(
       id,
       { token: createdToken },
       { new: true }
     );
-
+    if (!verify) {
+      throw HTTPError(401, "Email not verified");
+    }
     if (!loginedUser) {
       throw HTTPError(500, "Failed to update user token");
     }
