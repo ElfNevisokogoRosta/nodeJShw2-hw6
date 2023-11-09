@@ -1,14 +1,18 @@
 const User = require("../../models/user");
 const { HTTPError } = require("../../utils");
 const bcrypt = require("bcryptjs");
+const gravatar = require("gravatar");
 const registration = async (req, res, next) => {
   try {
-    const { password } = req.body;
+    const { password, email } = req.body;
     const hashedPassword = await bcrypt.hash(password, 13);
-    const newUser = { ...req.body, password: hashedPassword };
+    const avatarURL = gravatar.url(email);
+    const newUser = { ...req.body, password: hashedPassword, avatarURL };
     const user = await User.create(newUser);
-    const { email, subscription } = user;
-    res.status(201).json({ user: { email, subscription, token: "" } });
+    const { subscription } = user;
+    res
+      .status(201)
+      .json({ user: { email, subscription, token: "", avatarURL } });
   } catch (error) {
     error = HTTPError(409, error.message);
     throw error;
